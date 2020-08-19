@@ -1,7 +1,15 @@
 {
-  "name": "test",
-  "version": "0.1.0",
-  "private": true,
+  "name": "mark-words",
+  "version": "1.0.0",
+  "author": {
+    "name": "mwgeng",
+    "email": "844856933@qq.com"
+  },
+  "private": false,
+  "license":"MIT",
+  "description":"simple mark words by html",
+  "keyWorlds":["mark","words","vue", "component"],
+  "main": "lib/common.umd.min.js",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",

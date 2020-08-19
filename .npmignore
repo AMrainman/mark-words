@@ -1,0 +1,24 @@
+# dir
+examples/
+packages/
+public/
+node_modules/
+
+# Log 
+filesnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+vue.config.js
+babel.config.js
+*.map
+
+# Editor directories and files
+.DS_Store
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.prettierrc
