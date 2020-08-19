@@ -1,24 +1,13 @@
-# test
+# 这是一个简单的vue词语标注组件
 
-## Project setup
-```
-npm install
-```
+## props介绍
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+### sentence是当前显示的句子
 
-### Compiles and minifies for production
-```
-npm run build
-```
+### result是要标注的单词，不同类型的单词对应不同颜色
 
-### Lints and fixes files
-```
-npm run lint
-```
+### wordColors是颜色配置，必须和result中的key一一对应
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### underscoreType是特殊类型，用下划线表示
+
+### elementClick是单词点击回调，回调参数为{type, word}
