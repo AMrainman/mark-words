@@ -18,6 +18,46 @@ npm install
 npm run serve
 ```
 
+## use
+
+main.js
+
+```bash
+import markWords from 'mark-words'
+
+Vue.use(markWords)
+```
+
+component
+
+```bash
+<template>
+  <mark-words :sentence="sentence" :result="result" :wordColors="wordColors" @elementClick="elementClick"></mark-words>
+</template>
+<script>
+export default {
+  data() {
+    return {
+      sentence: '每套住宅应设卧室、起居室（厅）、厨房和卫生间等基本功能空间',
+      result: {
+        object: ['住宅', '卧室', '起居室（厅）', '厨房', '卫生间'],
+        attr: ['基本功能'],
+        attrValue: [],
+        relation: ['应设'],
+        adjunct: ['卧室、起居室（厅）、厨房和卫生间等']
+      },
+      wordColors
+    }
+  },
+  methods: {
+    elementClick({ type, word }) {
+      // 这里可以做你想做的事情...
+    }
+  }
+}
+</script>
+```
+
 ## props
 
 - sentence：当前显示的句子
