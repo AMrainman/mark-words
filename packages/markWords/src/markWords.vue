@@ -28,7 +28,7 @@ export default {
       type: Object,
       required: true
     },
-    underscoreType: {
+    underlineType: {
       type: String,
       default: ''
     }
@@ -64,11 +64,11 @@ export default {
     // 根据位置获取class
     getWordClass(index) {
       const className = []
-      const underscore = this.result[this.underscoreType] && this.result[this.underscoreType].some(item => {
+      const underline = this.result[this.underlineType] && this.result[this.underlineType].some(item => {
         return this.checkByIndex(index, item)
       })
-      if (underscore) {
-        className.push('underscore')
+      if (underline) {
+        className.push('underline')
       }
       const type = this.getTypeByIndex(index)
       if (type) {
@@ -80,7 +80,7 @@ export default {
     getTypeByIndex(index) {
       const [type = null] =
         Object.entries(this.result).find(([type, value]) => {
-          if (type === this.underscoreType) return
+          if (type === this.underlineType) return
           return value.some(item => {
             return this.checkByIndex(index, item)
           })
@@ -102,11 +102,11 @@ export default {
         })
         if (!name) return
         let newObj
-        if (type === this.underscoreType) {
+        if (type === this.underlineType) {
           // 定语
           newObj = {
-            underscoreType: type,
-            underscoreName: name
+            underlineType: type,
+            underlineName: name
           }
         } else {
           // 其他要素
@@ -143,8 +143,8 @@ export default {
       if (e.offsetY > span.offsetTop + fontSize || (!word.type && !word.name)) {
         // 点击的是下划线
         this.$emit('elementClick', {
-          type: word.underscoreType,
-          word: word.underscoreName
+          type: word.underlineType,
+          word: word.underlineName
         })
       } else {
         // 点击的是要素
@@ -163,7 +163,7 @@ export default {
   .pointer {
     cursor: pointer;
   }
-  .underscore {
+  .underline {
     position: relative;
     &:after {
       content: "";

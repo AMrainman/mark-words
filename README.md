@@ -8,6 +8,6 @@
 
 ### wordColors是颜色配置，必须和result中的key一一对应
 
-### underscoreType是特殊类型，用下划线表示
+### underlineType是特殊类型，用下划线表示
 
 ### elementClick是单词点击回调，回调参数为{type, word}

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <mark-words
-      underscoreType="adjunct"
+      underlineType="adjunct"
       :sentence="sentence"
       :result="result"
       :wordColors="wordColors"
@@ -19,7 +19,7 @@
         <p><b>wordColors</b>是颜色配置，必须和result中的key一一对应</p>
       </li>
       <li>
-        <p><b>underscoreType</b>是特殊类型，用下划线表示</p>
+        <p><b>underlineType</b>是特殊类型，用下划线表示</p>
       </li>
       <li>
         <p><b>elementClick</b>是单词点击回调，回调参数为{type, word}</p>
