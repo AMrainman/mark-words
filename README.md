@@ -2,6 +2,10 @@
 
 > 这是一个简单的vue词语标注组件
 
+## Demo
+
+![image](https://github.com/AMrainman/mark-words/static/demo.gif)
+
 ## Build Setup
 
 ```bash

@@ -143,8 +143,8 @@ export default {
       if (span === e.currentTarget) return // 点到了标注盒子
       let index = Array.prototype.indexOf.call(span.parentNode.children, span) // span在父级中的索引
       if (this.$slots.default) {
-        // 存在slot的，多了一个span元素
-        index -= 1
+        // 存在slot的，计算索引要减去slot的数量
+        index -= this.$slots.default.length
       }
       const word = this.dataWordCache[index]
       if (!word) return

@@ -7,12 +7,15 @@
       :result="result"
       :wordColors="wordColors"
       @elementClick="elementClick"
-    ></mark-words>
+    ><span></span></mark-words>
 
     <textarea type="text" readonly v-model="value" />
     <div>
       <button @click="getMarkWordsSelection">获取组件当前选中的文本</button>
-      <button @click="setMark">设置组件当前选中的文本为新的对象</button>
+      <button @click="setMark('object')">标为对象</button>
+      <button @click="setMark('attr')">标为属性</button>
+      <button @click="setMark('relation')">标为关系</button>
+      <button @click="setMark('adjunct')">标为定语</button>
     </div>
 
     <table>
@@ -72,7 +75,7 @@ export default {
     return {
       sentence: '每套住宅应设卧室、起居室（厅）、厨房和卫生间等基本功能空间',
       result: {
-        object: ['住宅', '卧室'],
+        object: ['住宅', '卫生间'],
         attr: ['基本功能'],
         attrValue: [],
         relation: ['应设'],
@@ -91,9 +94,9 @@ export default {
       const txt = this.$refs.markWords.getSelection()
       this.value = txt
     },
-    setMark() {
+    setMark(type) {
       const txt = this.$refs.markWords.getSelection()
-      const object = this.result.object
+      const object = this.result[type]
       if (txt && !object.includes(txt)) {
         object.push(txt)
       }

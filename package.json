@@ -1,6 +1,6 @@
 {
   "name": "mark-words",
-  "version": "1.0.4",
+  "version": "1.0.6",
   "author": {
     "name": "mwgeng",
     "email": "844856933@qq.com"
@@ -8,7 +8,7 @@
   "private": false,
   "license":"MIT",
   "description":"simple mark words by html",
-  "Keywords":["mark","words","vue", "component"],
+  "keywords":["mark", "words", "vue", "component"],
   "main": "lib/common.umd.min.js",
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -17,11 +17,8 @@
     "lib": "vue-cli-service build --target lib --name common --dest lib packages/index.js"
   },
   "dependencies": {
-    "@xunlei/vue-lazy-component": "^1.1.3",
     "core-js": "^3.6.5",
-    "vue": "^2.6.11",
-    "vue-router": "^3.2.0",
-    "vuex": "^3.4.0"
+    "vue": "^2.6.11"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.4.0",
