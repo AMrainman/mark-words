@@ -1,7 +1,7 @@
-import markWords from './markWords'
+import MarkWords from './MarkWords'
 
 // 将引入的组件模块存储，方便循环注册所有组件
-const components = { markWords }
+const components = { MarkWords }
 
 const install = Vue => {
   if (install.installed) return
@@ -26,4 +26,8 @@ export default {
   install,
   // 同时导出组件列表
   ...components
+}
+
+export {
+  MarkWords
 }

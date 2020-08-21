@@ -23,9 +23,9 @@ npm run serve
 main.js
 
 ```bash
-import markWords from 'mark-words'
+import MarkWords from 'mark-words'
 
-Vue.use(markWords)
+Vue.use(MarkWords)
 ```
 
 component
@@ -58,6 +58,12 @@ export default {
 </script>
 ```
 
+虽然只有一个组件，也支持按需引入的方式
+
+```bash
+import { MarkWords } from 'mark-words'
+```
+
 ## props
 
 - sentence：当前显示的句子
@@ -68,7 +74,9 @@ export default {
 
 - underlineType：特殊类型，用下划线表示（点击事件也是下划线）
 
-- elementClick：单词点击回调，回调参数为{type, word}
+- elementClick：组件中标注的点击回调，回调参数为 { type, word }
+
+- getSelection：该方法能获取组件当前选中的文本，没有则为空字符串
 
 ## License
 

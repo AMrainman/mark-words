@@ -1,5 +1,5 @@
 <template>
-  <div class="mark-box" data-mark="true" @click="proxyHandle">
+  <div v-if="isRendering" class="mark-box" data-mark="true" @click="proxyHandle">
     <slot></slot>
     <span
       v-for="(text, index) in wordList"
@@ -35,12 +35,25 @@ export default {
   },
   data() {
     return {
-      dataWordCache: []
+      dataWordCache: [],
+      isRendering: true
     }
   },
   computed: {
     wordList() {
       return this.sentence.split('') || []
+    }
+  },
+  watch: {
+    // 深度监听result，变化后更新组件
+    result: {
+      handler(val) {
+        this.isRendering = false
+        this.$nextTick(() => {
+          this.isRendering = true
+        })
+      },
+      deep: true
     }
   },
   methods: {
@@ -149,6 +162,23 @@ export default {
       } else {
         // 点击的是要素
         this.$emit('elementClick', { type: word.type, word: word.name })
+      }
+    },
+    // 获取选中的文本
+    getSelection() {
+      const selection = window.getSelection()
+      if (!selection || !selection.anchorNode || !selection.anchorNode.parentNode || !selection.anchorNode.parentNode.parentNode) {
+        return ''
+      }
+      const txt = selection.toString()
+      const start = selection.anchorNode.parentNode.parentNode.getAttribute('data-mark')
+      const end = selection.focusNode.parentNode.parentNode.getAttribute('data-mark')
+      if (txt && start && end) {
+        // 选取指定文本区域的文字
+        return txt
+      } else {
+        // 选取指定文本区域外的文字
+        return ''
       }
     }
   }
