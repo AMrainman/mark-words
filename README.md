@@ -4,7 +4,7 @@
 
 ## Demo
 
-![image](https://github.com/AMrainman/mark-words/static/demo.gif)
+![image](https://github.com/AMrainman/mark-words/blob/master/static/demo.gif)
 
 ## Build Setup
 
