@@ -19,7 +19,7 @@ cd mark-words
 npm install
 
 # develop
-npm run serve
+npm run dev
 ```
 
 ## use

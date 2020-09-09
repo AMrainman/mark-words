@@ -7,7 +7,7 @@
       :result="result"
       :wordColors="wordColors"
       @elementClick="elementClick"
-    ><span></span></mark-words>
+    ><span>1. </span></mark-words>
 
     <textarea type="text" readonly v-model="value" />
     <div>
@@ -17,6 +17,8 @@
       <button @click="setMark('relation')">标为关系</button>
       <button @click="setMark('adjunct')">标为定语</button>
     </div>
+
+    <p>注：该组件可自动标注出句子中所有可匹配到的单词，但不支持记录单词索引，所以不能判断位置重复的单词。</p>
 
     <table>
       <tr>
@@ -73,7 +75,7 @@ export default {
   },
   data() {
     return {
-      sentence: '每套住宅应设卧室、起居室（厅）、厨房和卫生间等基本功能空间',
+      sentence: '每套住宅应设卧室、起居室（厅）、厨房和卫生间等基本功能空间。住宅包含卧室。',
       result: {
         object: ['住宅', '卫生间'],
         attr: ['基本功能'],

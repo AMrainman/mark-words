@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="isRendering"
     class="mark-box"
     data-mark="true"
     @click="proxyHandle"
@@ -8,9 +9,10 @@
     <span
       v-for="(text, index) in wordList"
       :key="index"
-      :class="dataWordCache[index].class"
-      :style="{ backgroundColor: dataWordCache[index].bgColor }"
-      :title="dataWordCache[index].name || dataWordCache[index].underlineName"
+      :data-word="getWordDataByIndex(index)"
+      :class="getWordClass(index)"
+      :style="{ backgroundColor: getWordColor(index) }"
+      :title="dataWordCache[index] && dataWordCache[index].name"
     >{{ text }}</span>
   </div>
 </template>
@@ -38,8 +40,8 @@ export default {
   },
   data() {
     return {
-      dataWordCache: Array(this.sentence.length).fill({}),
-      html: ''
+      dataWordCache: [],
+      isRendering: true
     }
   },
   computed: {
@@ -50,55 +52,24 @@ export default {
   watch: {
     // 深度监听result，变化后更新组件
     result: {
-      handler: 'render',
-      deep: true,
-      immediate: true
+      handler: 'reRender',
+      deep: true
     },
-    sentence: 'render'
+    sentence: 'reRender'
   },
   methods: {
     // 重新渲染组件
-    render() {
-      this.wordList.forEach((word, index) => {
-        let obj = {}
-        const classNameSet = new Set()
-        Object.entries(this.result).forEach(([type, values]) => {
-          const name = values.find(item => {
-            return this.checkByIndex(index, item)
-          })
-          if (!name) return
-          let newObj
-          if (type === this.underlineType) {
-            // 定语
-            newObj = {
-              underlineType: type,
-              underlineName: name
-            }
-            classNameSet.add('underline')
-          } else {
-            // 其他要素
-            newObj = { type, name }
-            classNameSet.add('pointer')
-          }
-          obj = { ...obj, ...newObj }
-        })
-        if (classNameSet.size) {
-          obj.class = [...classNameSet].join(' ')
-        }
-        // if (obj.underlineType) {
-        //   obj.bgColor = this.wordColors[obj.underlineType]
-        // }
-        if (obj.type) {
-          obj.bgColor = this.wordColors[obj.type]
-        }
-        const oldData = this.dataWordCache[index]
-        if (oldData) {
-          // 存在老数据就合并
-          obj = { ...oldData, ...obj }
-        }
-        this.dataWordCache.splice(index, 1, obj)
+    reRender() {
+      this.isRendering = false
+      this.$nextTick(() => {
+        this.isRendering = true
       })
-      window.getSelection().removeAllRanges()
+    },
+    // 遍历所有要素，检查指定索引是否存在匹配的要素
+    isHighLight(index, type) {
+      return this.result[type].some(item => {
+        return this.checkByIndex(index, item)
+      })
     },
     // 遍历该索引是否在指定要素item之中  fromIndex为从文本指定位置查找
     checkByIndex(index, item, fromIndex = 0) {
@@ -111,6 +82,69 @@ export default {
       }
       return this.checkByIndex(index, item, endIndex + 1)
     },
+    // 根据位置获取class
+    getWordClass(index) {
+      const className = []
+      const underline = this.result[this.underlineType] && this.result[this.underlineType].some(item => {
+        return this.checkByIndex(index, item)
+      })
+      if (underline) {
+        className.push('underline')
+      }
+      const type = this.getTypeByIndex(index)
+      if (type) {
+        className.push('pointer')
+      }
+      return className.join(' ')
+    },
+    // 查找当前index所属的要素类型
+    getTypeByIndex(index) {
+      const [type = null] =
+        Object.entries(this.result).find(([type, value]) => {
+          if (type === this.underlineType) return
+          return value.some(item => {
+            return this.checkByIndex(index, item)
+          })
+        }) || []
+      return type
+    },
+    // 根据索引获取要素的背景颜色
+    getWordColor(index) {
+      const type = this.getTypeByIndex(index)
+      if (!type) return ''
+      return this.wordColors[type]
+    },
+    // 根据索引获取其dataword信息
+    getWordDataByIndex(index) {
+      let obj = null
+      Object.entries(this.result).forEach(([type, values]) => {
+        const name = values.find(item => {
+          return this.checkByIndex(index, item)
+        })
+        if (!name) return
+        let newObj
+        if (type === this.underlineType) {
+          // 定语
+          newObj = {
+            underlineType: type,
+            underlineName: name
+          }
+        } else {
+          // 其他要素
+          newObj = { type, name }
+        }
+        obj = { ...obj, ...newObj }
+        return true
+      })
+      if (!obj) return
+      const oldData = this.dataWordCache[index]
+      if (oldData) {
+        // 存在老数据就合并
+        obj = { ...oldData, ...obj }
+      }
+      this.dataWordCache[index] = obj
+      return JSON.stringify(obj)
+    },
     // 代理每一个span的点击事件
     proxyHandle(e) {
       const span = e.target
@@ -120,22 +154,22 @@ export default {
         // 存在slot的，计算索引要减去slot的数量
         index -= this.$slots.default.length
       }
-      const wordData = this.dataWordCache[index]
-      if (!wordData) return
+      const word = this.dataWordCache[index]
+      if (!word) return
 
       // 计算因设置行高而导致的偏移量
       const markBoxDom = getComputedStyle(span.parentNode)
       const fontSize = parseInt(markBoxDom['fontSize'])
 
-      if (e.offsetY > span.offsetTop + fontSize) {
+      if (e.offsetY > span.offsetTop + fontSize || (!word.type && !word.name)) {
         // 点击的是下划线
         this.$emit('elementClick', {
-          type: wordData.underlineType,
-          word: wordData.underlineName
+          type: word.underlineType,
+          word: word.underlineName
         })
-      } else if (wordData.type && wordData.name) {
+      } else {
         // 点击的是要素
-        this.$emit('elementClick', { type: wordData.type, word: wordData.name })
+        this.$emit('elementClick', { type: word.type, word: word.name })
       }
     },
     // 获取选中的文本
@@ -164,9 +198,6 @@ export default {
   position: relative;
   padding-top: 0 !important; /* mark-box不能设置padding，否则要重新计算高度偏移量 */
   line-height: 40px;
-  span {
-    white-space: pre;
-  }
   .pointer {
     cursor: pointer;
   }
