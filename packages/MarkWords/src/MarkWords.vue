@@ -62,6 +62,7 @@ export default {
       this.wordList.forEach((word, index) => {
         let obj = {}
         const classNameSet = new Set()
+
         Object.entries(this.result).forEach(([type, values]) => {
           const name = values.find(item => {
             return this.checkByIndex(index, item)
@@ -82,20 +83,14 @@ export default {
           }
           obj = { ...obj, ...newObj }
         })
+
         if (classNameSet.size) {
           obj.class = [...classNameSet].join(' ')
         }
-        // if (obj.underlineType) {
-        //   obj.bgColor = this.wordColors[obj.underlineType]
-        // }
         if (obj.type) {
           obj.bgColor = this.wordColors[obj.type]
         }
-        const oldData = this.dataWordCache[index]
-        if (oldData) {
-          // 存在老数据就合并
-          obj = { ...oldData, ...obj }
-        }
+
         this.dataWordCache.splice(index, 1, obj)
       })
       window.getSelection().removeAllRanges()
