@@ -2,6 +2,7 @@
   <div
     class="mark-box"
     data-mark="true"
+    ref="markWords"
     @click="proxyHandle"
   >
     <slot></slot>
@@ -10,7 +11,7 @@
       :key="index"
       :class="dataWordCache[index].class"
       :style="{ backgroundColor: dataWordCache[index].bgColor }"
-      :title="dataWordCache[index].name || dataWordCache[index].underlineName"
+      :title="dataWordCache[index].title"
     >{{ text }}</span>
   </div>
 </template>
@@ -34,6 +35,10 @@ export default {
     underlineType: {
       type: String,
       default: ''
+    },
+    aliasType: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
@@ -55,6 +60,12 @@ export default {
       immediate: true
     },
     sentence: 'render'
+  },
+  mounted() {
+    // 设置下划线颜色
+    if (this.underlineType && this.wordColors[this.underlineType]) {
+      this.$refs.markWords.style.setProperty('--underlineColor', this.wordColors[this.underlineType])
+    }
   },
   methods: {
     // 重新渲染组件
@@ -90,6 +101,7 @@ export default {
         if (obj.type) {
           obj.bgColor = this.wordColors[obj.type]
         }
+        obj.title = this.getTitle(obj, index)
 
         this.dataWordCache.splice(index, 1, obj)
       })
@@ -105,6 +117,20 @@ export default {
         return true
       }
       return this.checkByIndex(index, item, endIndex + 1)
+    },
+    // 根据index获取title
+    getTitle(obj, index) {
+      const type = obj.type || obj.underlineType
+      const name = obj.name || obj.underlineName
+      if (type) {
+        if (this.aliasType[type]) {
+          return `${this.aliasType[type]}：${name}`
+        } else {
+          return name
+        }
+      } else {
+        return ''
+      }
     },
     // 代理每一个span的点击事件
     proxyHandle(e) {
@@ -175,7 +201,7 @@ export default {
       bottom: -10px;
       width: 100%;
       height: 5px;
-      background: #00a4fd;
+      background: var(--underlineColor, #00a4fd);
       cursor: pointer;
     }
   }

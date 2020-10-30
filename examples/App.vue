@@ -6,6 +6,7 @@
       :sentence="sentence"
       :result="result"
       :wordColors="wordColors"
+      :aliasType="aliasType"
       @elementClick="elementClick"
     ><span>1. </span></mark-words>
 
@@ -40,6 +41,10 @@
       <tr>
         <td>underlineType</td>
         <td>可选的特殊类型，用下划线表示</td>
+      </tr>
+      <tr>
+        <td>aliasType</td>
+        <td>可选的类型的别名，用于title显示，如传则显示title：“对象：住宅”，不传则显示title：“住宅”</td>
       </tr>
     </table>
     <table>
@@ -82,6 +87,13 @@ export default {
         attrValue: [],
         relation: ['应设'],
         adjunct: ['卧室、起居室（厅）、厨房和卫生间等']
+      },
+      aliasType: {
+        object: '对象',
+        attr: '属性',
+        attrValue: '属性值',
+        relation: '关系',
+        adjunct: '定语'
       },
       wordColors,
       value: ''

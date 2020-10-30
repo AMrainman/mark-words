@@ -78,6 +78,8 @@ import { MarkWords } from 'mark-words'
 
 - underlineType：特殊类型，用下划线表示（点击事件也是下划线）
 
+- aliasType：类型的别名，用于title显示，如传则显示title：“对象：住宅”，不传则显示title：“住宅”
+
 - elementClick：组件中标注的点击回调，回调参数为 { type, word }
 
 - getSelection：该方法能获取组件当前选中的文本，没有则为空字符串
